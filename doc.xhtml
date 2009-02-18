@@ -1,0 +1,155 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Language" content="en-us"></meta>
+    <title>Ant Task for MSBuild or NAnt</title>
+  </head>
+
+  <body>
+    <h2>Ant</h2>
+
+    <h3>Description</h3>
+
+    <p>Runs the <a href="http://ant.apache.org/">Apache Ant</a> build
+    tool.</p>
+
+    <p>This archive contains a DLL compiled using Microsoft's .NET
+    framework 1.1 that only contains the NAnt task as well as an
+    archive that has been compiled using Microsoft's .NET framework
+    2.0 that contains the NAnt as well as the MSBuild task to run
+    Ant.</p>
+
+    <p>The task and attribute names have been chosen to integrate well
+    within the typical patterns of NAnt and MSBuild, i.e. they start
+    with lowercase in NAnt and uppercase in MSBuild.  Some parameters
+    that have been implemented as nested elements in NAnt are only
+    available as attributes in MSBuild - since I didn't manage to
+    figure out how to define nested elements in MSBuild.</p>
+
+    <h3>Parameters</h3>
+    <table border="1" cellpadding="2" cellspacing="0">
+      <tr>
+        <td valign="top"><b>Attribute</b></td>
+        <td valign="top"><b>Description</b></td>
+        <td align="center" valign="top"><b>Required</b></td>
+      </tr>
+      <tr>
+        <td valign="top">(a|A)ntHome</td>
+        <td valign="top">Where Ant has been installed.</td>
+        <td align="center">No - but then the environment variable
+        ANT_HOME must have been set correctly.</td>
+      </tr>
+      <tr>
+        <td valign="top">(b|B)uildFile</td>
+        <td valign="top">External build file to invoke Ant on.</td>
+        <td align="center">No - defaults to build.xml.</td>
+      </tr>
+      <tr>
+        <td valign="top">(j|J)avaHome</td>
+        <td valign="top">Where Java has been installed.</td>
+        <td align="center">No - will fall back to the JAVA_HOME
+        environment variable and rely on the PATH environment variable
+        if that hasn't been set either.  </td>
+      </tr>
+      <tr>
+        <td valign="top">(l|L)ibPath</td>
+        <td valign="top">argument to Ant's -lib command line option</td>
+        <td align="center">No.</td>
+      </tr>
+      <tr>
+        <td valign="top">AntTargets</td>
+        <td valign="top">comma separated list of target names to
+        execute. <em>MSBuild only</em>.</td>
+        <td align="center">No.</td>
+      </tr>
+      <tr>
+        <td valign="top">AntProperties</td>
+        <td valign="top">semicolon separated list of
+        <code>key=value</code> pairs that define Ant properties.
+        <em>MSBuild only</em>.</td>
+        <td align="center">No.</td>
+      </tr>
+    </table>
+
+    <h3>Parameters specified as nested elements - <em>NAnt only</em></h3>
+    <h4>antTarget</h4>
+
+    <p><code>antTarget</code> has a single required attribute name -
+    specifies a target to be run.</p>
+
+    <h4>antProperty</h4>
+
+    <p><code>antProperty</code> has two required attributes.  name and
+    value that specify name and value of a property that is to be
+    defined in the Ant invocation.</p>
+
+    <h3>Using</h3>
+
+    <p>Before you can use the task you need to define it.</p>
+
+    <p>NAnt:</p>
+<pre>
+  &lt;loadtasks assembly="AntTask.dll"/&gt;
+</pre>
+
+    <p>MSBuild:</p>
+<pre>
+  &lt;UsingTask AssemblyFile="AntTask.dll" TaskName="Ant"/&gt;
+</pre>
+
+    <h3>Examples</h3>
+
+    <p>Let Ant execute the default target in the file
+    <code>build.xml</code> in the current directory - assuming
+    ANT_HOME and JAVA_HOME are set correctly.</p>
+
+    <p>NAnt:</p>
+<pre>
+  &lt;ant/&gt;
+</pre>
+
+    <p>MSBuild:</p>
+<pre>
+  &lt;Ant/&gt;
+</pre>
+
+    <p>Let Ant execute the targets foo and bar in the file
+    <code>antbuild.xml</code> in the current directory, set the Ant
+    property test to the value testvalue - assuming ANT_HOME and
+    JAVA_HOME are set correctly.</p>
+
+    <p>NAnt:</p>
+<pre>
+  &lt;ant buildFile="antbuild.xml"&gt;
+    &lt;antTarget name="foo"/&gt;
+    &lt;antTarget name="bar"/&gt;
+    &lt;antProperty name="test" value="testValue"/&gt;
+  &lt;/ant&gt;
+</pre>
+
+    <p>MSBuild:</p>
+<pre>
+  &lt;Ant BuildFile="antbuild.xml" AntTargets="foo,bar" AntProperties="test=testValue"/&gt;
+</pre>
+
+    <p>Run the version of Ant installed in
+    <code>/usr/local/ant</code>, specify
+    <code>/opt/java/antlibs/ant-dotnet.jar</code> as <code>-lib</code>
+    argument, use the Java VM installed in
+    <code>/opt/java/home</code>.</p>
+
+    <p>NAnt:</p>
+<pre>
+  &lt;ant antHome="/usr/local/ant"
+    libPath="/opt/java/antlibs/ant-dotnet.jar" javaHome="/opt/java/home"/&gt;
+</pre>
+
+    <p>MSBuild:</p>
+<pre>
+  &lt;Ant AntHome="/usr/local/ant"
+    LibPath="/opt/java/antlibs/ant-dotnet.jar" JavaHome="/opt/java/home"/&gt;
+</pre>
+
+    <hr/>
+      <p align="center">Copyright &#169; 2005 Stefan Bodewig. All rights Reserved.</p>
+  </body>
+</html>

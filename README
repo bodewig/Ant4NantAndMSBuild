@@ -1,0 +1,10 @@
+This contains NAnt and MSBuild tasks to run Ant, for documentation
+see doc.xhtml.  For the license see the file LICENSE.
+
+I've compiled the code against NAnt 0.85rc3 and the version of MSBuild that
+shipped with Visual C# Express in November 2005, the results are
+AntTask-NAnt.dll compiled using MS Framework 1.1 (NAnt task only) and
+AntTask-FW2.0.dll compiled using MS Framework 2.0 (both tasks).
+
+If you encounter any problems, have suggestions or want to comment in any
+other way, feel free to contact me at anttask@stefan.samaflost.de.
