@@ -30,8 +30,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -43,7 +42,6 @@ using Microsoft.Build.Framework;
 #if NANT
 using NAnt.Core;
 using NAnt.Core.Attributes;
-using NAnt.Core.Tasks;
 #endif
 
 namespace de.samaflost.AntTask {
@@ -73,7 +71,7 @@ namespace de.samaflost.AntTask {
 
         #region task attributes
         #region the build file
-        private static readonly string DEFAULT_BUILD_FILE = "build.xml";
+        private const string DEFAULT_BUILD_FILE = "build.xml";
 
         private string buildFile = DEFAULT_BUILD_FILE;
 
@@ -94,7 +92,7 @@ namespace de.samaflost.AntTask {
         #endregion
 
         #region targets to execute
-        private ArrayList targetNames = new ArrayList();
+        private readonly List<string> targetNames = new List<string>();
 
         /// <summary>
         /// The target(s) to execute
@@ -102,7 +100,7 @@ namespace de.samaflost.AntTask {
         /// <remarks>This setter will only be used by MSBuild</remarks>
         public string AntTargets {
             get {
-                return string.Join(",", (string[]) targetNames.ToArray(typeof(string)));
+                return string.Join(",", targetNames.ToArray());
             }
             set {
                 foreach (string t in value.Split(',')) {
@@ -126,7 +124,7 @@ namespace de.samaflost.AntTask {
                 AntTarget[] r = new AntTarget[targetNames.Count];
                 for (int i = 0; i < r.Length; i++) {
                     r[i] = new AntTarget();
-                    r[i].TargetName = targetNames[i] as string;
+                    r[i].TargetName = targetNames[i];
                 }
                 return r;
             }
@@ -135,7 +133,7 @@ namespace de.samaflost.AntTask {
         #endregion
 
         #region properties to set
-        private StringDictionary propertyTable = new StringDictionary();
+        private readonly IDictionary<string, string> propertyTable = new Dictionary<string, string>();
 
         /// <summary>
         /// The properties(s) to define
@@ -221,7 +219,7 @@ namespace de.samaflost.AntTask {
 #endif
         public string AntHome {
             get {
-                return antHome == null ? Environment.GetEnvironmentVariable("ANT_HOME") : antHome;
+                return antHome ?? Environment.GetEnvironmentVariable("ANT_HOME");
             }
             set {
                 antHome = value;
@@ -240,7 +238,7 @@ namespace de.samaflost.AntTask {
 #endif
         public string JavaHome {
             get {
-                return javaHome == null ? Environment.GetEnvironmentVariable("JAVA_HOME") : javaHome;
+                return javaHome ?? Environment.GetEnvironmentVariable("JAVA_HOME");
             }
             set {
                 javaHome = value;
@@ -251,7 +249,7 @@ namespace de.samaflost.AntTask {
         #endregion
 
         #region personality checks
-        private BuildTool currentBuildTool;
+        private readonly BuildTool currentBuildTool;
         protected bool RunningInMSBuild {
             get {
                 return currentBuildTool == BuildTool.MSBuild;
@@ -333,7 +331,7 @@ namespace de.samaflost.AntTask {
 
         #region support stuff
         private static readonly string HELP_KEYWORD = string.Empty;
-        private static readonly string MESSAGE_SENDER = "ant task";
+        private const string MESSAGE_SENDER = "ant task";
 
         private void GenericMSBuildLog(string message, MessageImportance i) {
             BuildEngine.LogMessageEvent(new BuildMessageEventArgs(message, HELP_KEYWORD, MESSAGE_SENDER, i));
@@ -368,7 +366,7 @@ namespace de.samaflost.AntTask {
                 Warn(string.Format("Can't determine ANT_HOME, please set the {0} attribute or the ANT_HOME environment variable", RunningInMSBuild ? "AntHome" : "antHome"));
                 return false;
             }
-            FileInfo antLauncherJar = new FileInfo(Path.Combine(AntHome, "lib" + Path.DirectorySeparatorChar + "ant-launcher.jar"));
+            FileInfo antLauncherJar = new FileInfo(Path.Combine(Path.Combine(AntHome, "lib"), "ant-launcher.jar"));
             if (!antLauncherJar.Exists) {
                 Warn(string.Format("'{0}' calculated from ANT_HOME '{1}' doesn't exist", antLauncherJar.FullName, AntHome));
                 return false;
@@ -387,19 +385,19 @@ namespace de.samaflost.AntTask {
             if (JavaHome != null) {
                 if (!isDos) {
                     // AIX likes to hide IBM's JDK in strange places
-                    FileInfo fi = new FileInfo(Path.Combine(JavaHome, "jre" + Path.DirectorySeparatorChar + "sh" + Path.DirectorySeparatorChar + "java"));
+                    FileInfo fi = new FileInfo(Path.Combine(Path.Combine(Path.Combine(JavaHome, "jre"), "sh"), "java"));
                     if (fi.Exists) {
                         java = fi.FullName;
                     }
                     else {
-                        fi = new FileInfo(Path.Combine(JavaHome, "bin" + Path.DirectorySeparatorChar + "java"));
+                        fi = new FileInfo(Path.Combine(Path.Combine(JavaHome, "bin"), "java"));
                         if (fi.Exists) {
                             java = fi.FullName;
                         }
                     }
                 }
                 else {
-                    FileInfo fi = new FileInfo(Path.Combine(JavaHome, "bin" + Path.DirectorySeparatorChar + "java.exe"));
+                    FileInfo fi = new FileInfo(Path.Combine(Path.Combine(JavaHome, "bin"), "java.exe"));
                     if (fi.Exists) {
                         java = fi.FullName;
                     }
