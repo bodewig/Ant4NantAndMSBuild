@@ -46,7 +46,7 @@ using NAnt.Core.Attributes;
 using NAnt.Core.Tasks;
 #endif
 
-namespace AntTask {
+namespace de.samaflost.AntTask {
 
     public enum BuildTool { NAnt, MSBuild }
 
@@ -102,7 +102,7 @@ namespace AntTask {
         /// <remarks>This setter will only be used by MSBuild</remarks>
         public string AntTargets {
             get {
-                return string.Join(",", (string[])targetNames.ToArray(typeof(string)));
+                return string.Join(",", (string[]) targetNames.ToArray(typeof(string)));
             }
             set {
                 foreach (string t in value.Split(',')) {
@@ -448,7 +448,7 @@ namespace AntTask {
             }
         }
 
-        private static readonly char[] BAD_CHARS = new char[] {' ', '\t', '\"'};
+        private static readonly char[] BAD_CHARS = new char[] { ' ', '\t', '\"' };
         /// <summary>
         /// puts quote around arg if arg contains whitespace
         /// </summary>
