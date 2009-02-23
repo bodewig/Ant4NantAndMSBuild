@@ -13,10 +13,8 @@
     tool.</p>
 
     <p>This archive contains a DLL compiled using Microsoft's .NET
-    framework 1.1 that only contains the NAnt task as well as an
-    archive that has been compiled using Microsoft's .NET framework
-    2.0 that contains the NAnt as well as the MSBuild task to run
-    Ant.</p>
+    framework 2.0 that contains both the NAnt task as well as an as
+    the MSBuild task to run Ant.</p>
 
     <p>The task and attribute names have been chosen to integrate well
     within the typical patterns of NAnt and MSBuild, i.e. they start
@@ -88,12 +86,12 @@
 
     <p>NAnt:</p>
 <pre>
-  &lt;loadtasks assembly="AntTask.dll"/&gt;
+  &lt;loadtasks assembly="de.samaflost.AntTask.dll"/&gt;
 </pre>
 
     <p>MSBuild:</p>
 <pre>
-  &lt;UsingTask AssemblyFile="AntTask.dll" TaskName="Ant"/&gt;
+  &lt;UsingTask AssemblyFile="de.samaflost.AntTask.dll" TaskName="Ant"/&gt;
 </pre>
 
     <h3>Examples</h3>
