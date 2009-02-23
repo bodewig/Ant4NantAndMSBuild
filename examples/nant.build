@@ -1,0 +1,10 @@
+<project name="example">
+
+  <loadtasks assembly="de.samaflost.AntTask.dll"/>
+  <ant buildFile="antbuild.xml">
+    <antTarget name="foo"/>
+    <antTarget name="bar"/>
+    <antProperty name="test" value="testValue"/>
+  </ant>
+
+</project>

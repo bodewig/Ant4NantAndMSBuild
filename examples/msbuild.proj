@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build"
+         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask AssemblyFile="de.samaflost.AntTask.dll" TaskName="Ant"/>
+
+  <Target Name="Build">
+    <Ant BuildFile="antbuild.xml" AntTargets="foo,bar"
+         AntProperties="test=testValue"/>
+  </Target>
+
+</Project>

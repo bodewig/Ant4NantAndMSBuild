@@ -1,0 +1,15 @@
+<project default="default">
+  <target name="default">
+    <echo>This is the default target</echo>
+  </target>
+
+  <target name="foo">
+    <echo>This is the foo target</echo>
+    <echo>$${test}'s value is ${test}</echo>
+  </target>
+
+  <target name="bar">
+    <echo>This is the bar target</echo>
+    <echo>$${test}'s value is ${test}</echo>
+  </target>
+</project>
