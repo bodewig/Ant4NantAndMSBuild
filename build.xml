@@ -1,0 +1,26 @@
+<project default="src-zip">
+  <property name="zipfile" value="AntTask-src-1.0.1.zip"/>
+
+  <target name="clean">
+    <delete>
+      <fileset dir="AntTask">
+        <include name="**/bin/**"/>
+        <include name="**/obj/**"/>
+      </fileset>
+      <file file="${zipfile}"/>
+    </delete>
+  </target>
+
+  <target name="src-zip">
+    <zip destfile="${zipfile}">
+      <fileset dir=".">
+        <exclude name="_darcs/"/>
+        <exclude name="**/bin/**"/>
+        <exclude name="**/obj/**"/>
+        <exclude name="**/*.dll"/>
+        <exclude name="**/*.suo"/>
+        <exclude name="${zipfile}"/>
+      </fileset>
+    </zip>
+  </target>
+</project>
